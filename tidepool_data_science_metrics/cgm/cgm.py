@@ -2,8 +2,6 @@ import numpy as np
 from typing import Tuple
 
 import tidepool_data_science_metrics.common.common as common
-#
-# .common import get_mean_glucose, get_avg_glucose, get_std_deviation
 
 
 def cv_of_glucose(bg_values, round_val=2):
@@ -167,10 +165,3 @@ def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, in
     if lower_threshold > upper_threshold:
         raise Exception("lower threshold is higher than the upper threshold.")
     return lower_threshold, upper_threshold
-
-
-
-
-
-
-

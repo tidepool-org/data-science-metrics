@@ -1,10 +1,12 @@
 import pandas as pd
 from tidepool_data_science_metrics.common.common import mean, avg, std_deviation
 
+
 def test_avg_glucose():
     pd_values = get_values()
     average = avg(pd_values.to_numpy())
     assert average == 86.48
+
 
 def test_mean_glucose():
     pd_values = get_values()
@@ -129,4 +131,3 @@ def get_values():
         [50],
     ]
     return pd.DataFrame(values, columns=["bg_values"])
-

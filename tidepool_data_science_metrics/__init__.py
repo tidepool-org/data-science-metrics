@@ -17,5 +17,3 @@ from tidepool_data_science_metrics.common.common import (
     get_std_deviation
 )
 """
-
-
