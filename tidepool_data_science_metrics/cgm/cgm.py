@@ -6,13 +6,19 @@ import tidepool_data_science_metrics.common.common as common
 
 def cv_of_glucose(bg_values, round_val=2):
     """
-        Calculate the average within a set of glucose values
+    Calculate the coefficient of variation on set of glucose values
 
-        Arguments:
-        values -- numpy array contains a list of bg values.
-        round_val -- the number of digits to round the result to.
+    Parameters
+    ----------
+    bg_values : ndarray
+        1D array containing data with `int` type.
+    round_val : int
+        The number of digits to round the result to.
 
-        Output: Calculated Average
+    Returns
+    -------
+    int
+        The calculated Coefficient of variation
     """
     std_dev = common.std_deviation(bg_values, round_val)
     avg_glu = common.avg(bg_values, round_val)
@@ -21,39 +27,49 @@ def cv_of_glucose(bg_values, round_val=2):
 
 def gmi(bg_values, round_val=2):
     """
-        Calculate the average within a set of glucose values
+    Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
+    A1C level that would be expected based on mean glucose measured
 
-        Arguments:
-        values -- numpy array contains a list of bg values.
-        round_val -- the number of digits to round the result to.
+    Parameters
+    ----------
+    bg_values : ndarray
+        1D array containing data with `int` type.
+    round_val : int
+        The number of digits to round the result to.
 
-        Output: Calculated Average
-
-        GMI(mmol / mol) = 12.71 + 4.70587 x[mean glucose in mmol / L]
-        GMI( %) = 3.31 + 0.02392 x[mean glucose in mg / dL]
-        #For example, if the SD is 50 mg/dl, and the average glucose is 150 mg/dl,
-        # then you divide 50 by 150, multiply by 100, and you get a CV of 33%.
+    Returns
+    -------
+    int
+        The calculated Glucose Management Indicator
     """
     gmi = 3.31 + (0.02392 * common.mean(bg_values))
     return round(gmi, round_val)
 
 
-def get_percent_values_by_range(
+def percent_values_by_range(
     bg_values, lower_threshold: int, upper_threshold: int, round_val=2
 ):
     """
-        Calculate the percent of values that match has a bg within the lower and upper threshold.
-        The lower and upper values will be included in the range to calculate on.
+    Calculate the percent of values that match has a bg within the lower and upper threshold.
+    The lower and upper values will be included in the range to calculate on.
 
-        Arguments:
-        bg_values -- numpy array contains a list of bg values.
-        lower_threshold -- The the lower value in the range to calculate on.
-        upper_threshold -- The the upper value in the range to calculate on.
-        round_val -- the number of digits to round the result to.
+    Parameters
+    ----------
+    bg_values : ndarray
+        1D array containing data with `int` type.
+    lower_threshold : int
+        The the lower value in the range to calculate on.
+    upper_threshold : int
+        zThe the upper value in the range to calculate on.
+    round_val : int
+        The number of digits to round the result to.
 
-        Output:
-        Percent value
+    Returns
+    -------
+    int
+        The percent value by range.
     """
+
     calc_low_thresh, calc_upper_thresh = _validate_input(
         lower_threshold, upper_threshold
     )
@@ -71,20 +87,7 @@ def get_percent_values_by_range(
 def percent_time_in_range(
     bg_values, lower_threshold: int, upper_threshold: int, round_val=2, time_delta=5
 ):
-    """
-        Calculate the number of minutes the bg was within the lower and upper range.
-        The lower and upper values will be included in the range to calculate on.
 
-        Arguments:
-        bg_values -- Panda Dataframe with a column named values that contains a list of bg values and a column named date
-        containing a python datetime value.
-        lower_threshold -- The the lower value in the range to calculate on.
-        upper_threshold -- The the upper value in the range to calculate on.
-        round_val -- the number of digits to round the result to.
-
-        Output:
-        Percent of bg values in range
-    """
     calc_low_thresh, calc_upper_thresh = _validate_input(
         lower_threshold, upper_threshold
     )
@@ -99,16 +102,23 @@ def episodes(
     bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duration=5, round_val=2
 ):
     """
-        Calculate the number of episodes for a given set of glucose values based on provided thresholds.
+    Calculate the number of episodes for a given set of glucose values based on provided thresholds.
 
-        Arguments:
-        bg_values -- Panda Dataframe with a column named values that contains a list of bg values and a column named date.
-        episodes_threshold -- The lower value blood glucose value considered in an episode.
-        min_ct_per_ep -- The minimum count of consecutive blood glucose values that defines an episode.
-        min_duration -- not implemented
-        round_val -- not implemented
+    Parameters
+    ----------
+    bg_values : ndarray
+        1D array containing data with `int` type.
+    lower_threshold : int
+        The the lower value in the range to calculate on.
+    upper_threshold : int
+        zThe the upper value in the range to calculate on.
+    round_val : int
+        The number of digits to round the result to.
 
-        Output: Number of episodes.
+    Returns
+    -------
+    int
+        The number of episodes matching input specifications.
     """
     bg_values_df.loc[(bg_values_df["values"] < episodes_threshold), "episode"] = 1
     bg_values_df.loc[(bg_values_df["values"] >= episodes_threshold), "episode"] = 0
@@ -135,13 +145,23 @@ def episodes(
 
 def bgri(bg_values, round_val=2):
     """
-            Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
+    Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
 
-            Arguments:
-            values -- numpy array contains a list of bg values.
-            round_val -- the number of digits to round the result to.
+    Parameters
+    ----------
+    bg_values : ndarray
+        1D array containing data with `int` type.
+    round_val : int
+        The number of digits to round the result to.
 
-            Output: Calculated standard deviation
+    Returns
+    -------
+    int
+        The number LBGI results.
+    int
+        The number HBGI results.
+    int
+        The number BRGI results.
     """
     bg_values[bg_values < 1] = 1  # this is added to take care of edge case BG <= 0
     transformed_bg = 1.509 * ((np.log(bg_values) ** 1.084) - 5.381)

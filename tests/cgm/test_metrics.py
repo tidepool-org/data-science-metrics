@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 from tidepool_data_science_metrics.cgm.cgm import (
-    get_percent_values_by_range,
+    percent_values_by_range,
     percent_time_in_range,
     cv_of_glucose,
     gmi,
@@ -13,13 +13,13 @@ import datetime
 
 def test_calculation():
     pd_values = get_values()
-    percent = get_percent_values_by_range(pd_values.to_numpy(), 100, 0)
+    percent = percent_values_by_range(pd_values.to_numpy(), 100, 0)
     assert 22.0 == percent
 
 
 def test_invalid_lower_number():
     with pytest.raises(Exception) as excinfo:
-        percent = get_percent_values_by_range(get_values(), -1, 0)
+        percent = percent_values_by_range(get_values(), -1, 0)
     assert "lower and upper thresholds must be a non-negative number" in str(
         excinfo.value
     )
@@ -27,7 +27,7 @@ def test_invalid_lower_number():
 
 def test_invalid_upper_number():
     with pytest.raises(Exception) as excinfo:
-        percent = get_percent_values_by_range(get_values(), 0, -1)
+        percent = percent_values_by_range(get_values(), 0, -1)
     assert "lower and upper thresholds must be a non-negative number" in str(
         excinfo.value
     )
@@ -35,12 +35,12 @@ def test_invalid_upper_number():
 
 def test_missing_lower_number():
     with pytest.raises(TypeError) as excinfo:
-        percent = get_percent_values_by_range(get_values(), 100)
+        percent = percent_values_by_range(get_values(), 100)
 
 
 def test_lower_number_higher_than_upper_number():
     with pytest.raises(Exception) as excinfo:
-        percent = get_percent_values_by_range(get_values(), 100, 20)
+        percent = percent_values_by_range(get_values(), 100, 20)
     print(str(excinfo.value))
     assert "lower threshold is higher than the upper threshold." in str(excinfo.value)
 
