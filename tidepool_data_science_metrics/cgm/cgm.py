@@ -98,49 +98,43 @@ def percent_time_in_range(
     return round(in_range / val_count * 100, round_val)
 
 
-def episodes(
-    bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duration=5, round_val=2
-):
+def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duration=5):
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
+    How the episode count it calculated.
+    1. Identify all bg values that are within episode range.
+    2. Find the array value that is in range and its next value after it is not in range.  This gives the index of the
+    last bg in an potential episode.
+    3. The next check looks at the value at the array index number based on min_ct_per_ep before the value from step 2.
+    If that value is a 1 then we count this range as an "episode".
 
     Parameters
     ----------
     bg_values : ndarray
         1D array containing data with `int` type.
-    lower_threshold : int
-        The the lower value in the range to calculate on.
-    upper_threshold : int
-        zThe the upper value in the range to calculate on.
-    round_val : int
-        The number of digits to round the result to.
+    episodes_threshold : int
+        Any bg values below this value will be considered as within the episode.
+    min_ct_per_ep : int
+        The number of consecutive bg values required in the threshold range to be considered an episode.
+    min_duration : int (Not Implemented at this time.)
+        The number of minutes expected between each bg value in the array. If there are gaps the code will .....
+         
 
     Returns
     -------
     int
         The number of episodes matching input specifications.
     """
-    bg_values_df.loc[(bg_values_df["values"] < episodes_threshold), "episode"] = 1
-    bg_values_df.loc[(bg_values_df["values"] >= episodes_threshold), "episode"] = 0
-    bg_values_df["group"] = 0
-    bg_values_df["group"][
-        (
-            (bg_values_df.episode == 1)
-            & (bg_values_df.episode.shift(1) == 0)
-            & (bg_values_df.episode.shift(-1) == 1)
-            & (bg_values_df.episode.shift(-(min_ct_per_ep - 1)) == 1)
-        )
-    ] = 1
-    bg_values_df["group"][
-        (
-            (bg_values_df.episode == 1)
-            & (bg_values_df.index == 0)
-            & (bg_values_df.episode.shift(-1) == 1)
-            & (bg_values_df.episode.shift(-2) == 1)
-        )
-    ] = 1
-    group_sum = sum(bg_values_df.group)
-    return group_sum
+    in_range = np.where(bg_values_df[:, 1] < episodes_threshold, 1, 0)
+    episodes_count = np.count_nonzero(
+        in_range[
+            (in_range == 1)
+            & (np.roll(in_range, 1) == 1)
+            & (np.roll(in_range, -1) == 0)
+            & (np.roll(in_range, (min_ct_per_ep - 1)) == 1)
+        ]
+    )
+    return episodes_count
 
 
 def bgri(bg_values, round_val=2):
@@ -173,8 +167,7 @@ def bgri(bg_values, round_val=2):
     LBGI = round(np.mean(rlBG), round_val)
     HBGI = round(np.mean(rhBG), round_val)
     BGRI = round(LBGI + HBGI, round_val)
-
-    return LBGI[0], HBGI[0], BGRI[0]
+    return LBGI, HBGI, BGRI
 
 
 def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, int]:
