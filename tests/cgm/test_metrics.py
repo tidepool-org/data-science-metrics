@@ -101,6 +101,18 @@ def test_get_episodes_4_consecutive():
     assert std == 1
 
 
+def test_get_episodes_4_consecutive():
+    pd_values = get_date_ep_values()
+    std = episodes(pd_values, 55, 4)
+    assert std == 1
+
+
+def test_episodes_nonconsecutive():
+    pd_values = get_date_ep_values()
+    std = episodes(pd_values, 55, 6)
+    assert std == 0
+
+
 def get_date_values():
     values = [
         ["8/15/2019 00:40:00", 87],
@@ -143,12 +155,13 @@ def get_date_ep_values():
             ["8/15/2019 01:20:00", 54],
             ["8/15/2019 01:25:00", 101],
             ["8/15/2019 01:30:00", 105],
-            ["8/15/2019 01:35:00", 80],
-            ["8/15/2019 01:40:00", 44],
-            ["8/15/2019 01:45:00", 43],
+            ["8/15/2019 01:35:00", 44],
+            ["8/15/2019 01:40:00", 80],
+            ["8/15/2019 01:45:00", 40],
             ["8/15/2019 01:50:00", 50],
             ["8/15/2019 01:55:00", 52],
-            ["8/16/2019 02:00:00", 108],
+            ["8/16/2019 02:00:00", 45],
+            ["8/16/2019 02:05:00", 108],
         ],
         dtype=object,
     )

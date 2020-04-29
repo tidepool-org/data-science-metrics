@@ -125,15 +125,14 @@ def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duratio
     int
         The number of episodes matching input specifications.
     """
+    check_string = "(in_range == 1) & (np.roll(in_range, -1) == 0) "
+    i = min_ct_per_ep - 1
+    while i > 0:
+        check_string = check_string + f" & (np.roll(in_range, {i}) == 1) "
+        i -= 1
     in_range = np.where(bg_values_df[:, 1] < episodes_threshold, 1, 0)
-    episodes_count = np.count_nonzero(
-        in_range[
-            (in_range == 1)
-            & (np.roll(in_range, 1) == 1)
-            & (np.roll(in_range, -1) == 0)
-            & (np.roll(in_range, (min_ct_per_ep - 1)) == 1)
-        ]
-    )
+    episodes_count = np.count_nonzero(in_range[eval(check_string)])
+
     return episodes_count
 
 
