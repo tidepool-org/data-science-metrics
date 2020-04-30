@@ -84,20 +84,6 @@ def percent_values_by_range(
     return results
 
 
-def percent_time_in_range(
-    bg_values, lower_threshold: int, upper_threshold: int, round_val=2, time_delta=5
-):
-
-    calc_low_thresh, calc_upper_thresh = _validate_input(
-        lower_threshold, upper_threshold
-    )
-    bg_df = bg_values["bg_values"]
-    bg_np = bg_df.to_numpy()
-    in_range = np.count_nonzero((bg_np > calc_low_thresh) & (bg_np < calc_upper_thresh))
-    val_count = bg_df.count()
-    return round(in_range / val_count * 100, round_val)
-
-
 def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duration=5):
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
@@ -118,7 +104,6 @@ def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duratio
         The number of consecutive bg values required in the threshold range to be considered an episode.
     min_duration : int (Not Implemented at this time.)
         The number of minutes expected between each bg value in the array. If there are gaps the code will .....
-         
 
     Returns
     -------

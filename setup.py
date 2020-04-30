@@ -1,15 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-description: setup script for the tidals package
-created: 2018-10-01
-author: Ed Nykaza
-license: BSD-2-Clause
-Parts of this file were taken from
-https://packaging.python.org/tutorials/packaging-projects/
-"""
 
-# %% REQUIRED LIBRARIES
 import setuptools
 import os
 import glob
