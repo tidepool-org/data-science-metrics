@@ -4,15 +4,15 @@ from typing import Tuple
 import tidepool_data_science_metrics.common.common as common
 
 
-def cv_of_glucose(bg_values, round_val=2):
+def cv_of_glucose(bg_array, round_val=2):
     """
     Calculate the coefficient of variation on set of glucose values
 
     Parameters
     ----------
-    bg_values : ndarray
+    bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int
+    round_val : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -20,21 +20,21 @@ def cv_of_glucose(bg_values, round_val=2):
     int
         The calculated Coefficient of variation
     """
-    std_dev = common.std_deviation(bg_values, round_val)
-    avg_glu = common.avg(bg_values, round_val)
+    std_dev = common.std_deviation(bg_array, round_val=round_val)
+    avg_glu = common.avg(bg_array, round_val=round_val)
     return round(std_dev / avg_glu * 100, round_val)
 
 
-def gmi(bg_values, round_val=2):
+def gmi(bg_array, round_val=2):
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
     A1C level that would be expected based on mean glucose measured
 
     Parameters
     ----------
-    bg_values : ndarray
+    bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int
+    round_val : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -42,12 +42,12 @@ def gmi(bg_values, round_val=2):
     int
         The calculated Glucose Management Indicator
     """
-    gmi = 3.31 + (0.02392 * common.mean(bg_values))
+    gmi = 3.31 + (0.02392 * common.mean(bg_array))
     return round(gmi, round_val)
 
 
 def percent_values_by_range(
-    bg_values, lower_threshold: int, upper_threshold: int, round_val=2
+    bg_array, lower_threshold: int, upper_threshold: int, round_val=2
 ):
     """
     Calculate the percent of values that match has a bg within the lower and upper threshold.
@@ -55,13 +55,13 @@ def percent_values_by_range(
 
     Parameters
     ----------
-    bg_values : ndarray
+    bg_array : ndarray
         1D array containing data with `int` type.
     lower_threshold : int
         The the lower value in the range to calculate on.
     upper_threshold : int
         zThe the upper value in the range to calculate on.
-    round_val : int
+    round_val : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -75,16 +75,16 @@ def percent_values_by_range(
     )
     results = round(
         np.where(
-            (bg_values <= calc_upper_thresh) & (bg_values >= calc_low_thresh), 1, 0
+            (bg_array <= calc_upper_thresh) & (bg_array >= calc_low_thresh), 1, 0
         ).sum()
-        / bg_values.size
+        / bg_array.size
         * 100,
         round_val,
     )
     return results
 
 
-def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duration=5):
+def episodes(bg_array, episodes_threshold: int, min_ct_per_ep=3, min_duration=5):
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
     How the episode count it calculated.
@@ -96,13 +96,13 @@ def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duratio
 
     Parameters
     ----------
-    bg_values : ndarray
+    bg_array : ndarray
         1D array containing data with `int` type.
     episodes_threshold : int
         Any bg values below this value will be considered as within the episode.
-    min_ct_per_ep : int
+    min_ct_per_ep : int, optional
         The number of consecutive bg values required in the threshold range to be considered an episode.
-    min_duration : int (Not Implemented at this time.)
+    min_duration : int, optional (Not Implemented at this time.)
         The number of minutes expected between each bg value in the array. If there are gaps the code will .....
 
     Returns
@@ -115,21 +115,21 @@ def episodes(bg_values_df, episodes_threshold: int, min_ct_per_ep=3, min_duratio
     while i > 0:
         check_string = check_string + f" & (np.roll(in_range, {i}) == 1) "
         i -= 1
-    in_range = np.where(bg_values_df[:, 1] < episodes_threshold, 1, 0)
+    in_range = np.where(bg_array[:, 1] < episodes_threshold, 1, 0)
     episodes_count = np.count_nonzero(in_range[eval(check_string)])
 
     return episodes_count
 
 
-def bgri(bg_values, round_val=2):
+def bgri(bg_array, round_val=2):
     """
     Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
 
     Parameters
     ----------
-    bg_values : ndarray
+    bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int
+    round_val : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -141,8 +141,8 @@ def bgri(bg_values, round_val=2):
     int
         The number BRGI results.
     """
-    bg_values[bg_values < 1] = 1  # this is added to take care of edge case BG <= 0
-    transformed_bg = 1.509 * ((np.log(bg_values) ** 1.084) - 5.381)
+    bg_array[bg_array < 1] = 1  # this is added to take care of edge case BG <= 0
+    transformed_bg = 1.509 * ((np.log(bg_array) ** 1.084) - 5.381)
     risk_power = 10 * (transformed_bg) ** 2
     low_risk_bool = transformed_bg < 0
     high_risk_bool = transformed_bg > 0
