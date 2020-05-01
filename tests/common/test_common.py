@@ -1,5 +1,4 @@
 from tidepool_data_science_metrics.common.common import mean, avg, std_deviation
-import numpy as np
 
 
 def test_avg_glucose(bg_array):
