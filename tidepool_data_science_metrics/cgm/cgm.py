@@ -84,6 +84,111 @@ def percent_values_by_range(
     return results
 
 
+def percent_time_in_range_70_180(bg_array, round_val=2):
+    """
+    Calculate the percent of values with a blood glucose value between 70 and 180.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with `int` type.
+    round_val : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent value with in the range between 70 and 180.
+    """
+    return percent_values_by_range(
+        bg_array, lower_threshold=70, upper_threshold=180, round_val=round_val
+    )
+
+
+def percent_time_above_180(bg_array, round_val=2):
+    """
+    Calculate the percent of values with a blood glucose above 180.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with `int` type.
+    round_val : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent values above 180.
+    """
+    return percent_values_by_range(
+        bg_array, lower_threshold=180, upper_threshold=1000, round_val=round_val
+    )
+
+
+def percent_time_below_70(bg_array, round_val=2):
+    """
+    Calculate the percent of values with a blood glucose below 70.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with `int` type.
+    round_val : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent values below 70.
+    """
+    return percent_values_by_range(
+        bg_array, lower_threshold=0, upper_threshold=70, round_val=round_val
+    )
+
+
+def percent_time_below_54(bg_array, round_val=2):
+    """
+    Calculate the percent of values with a blood glucose below 54.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with `int` type.
+    round_val : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent values below 54.
+    """
+    return percent_values_by_range(
+        bg_array, lower_threshold=0, upper_threshold=54, round_val=round_val
+    )
+
+
+def percent_time_above_250(bg_array, round_val=2):
+    """
+    Calculate the percent of values with a blood glucose above 250.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with `int` type.
+    round_val : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent values above 250.
+    """
+    return percent_values_by_range(
+        bg_array, lower_threshold=250, upper_threshold=0, round_val=round_val
+    )
+
+
 def episodes(bg_array, episodes_threshold: int, min_ct_per_ep=3, min_duration=5):
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
