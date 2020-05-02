@@ -4,31 +4,11 @@ from typing import Tuple
 import tidepool_data_science_metrics.common.common as common
 
 
-def cv_of_glucose(bg_array, round_val=2):
-    """
-    Calculate the coefficient of variation on set of glucose values
-
-    Parameters
-    ----------
-    bg_array : ndarray
-        1D array containing data with `int` type.
-    round_val : int, optional
-        The number of digits to round the result to.
-
-    Returns
-    -------
-    int
-        The calculated Coefficient of variation
-    """
-    std_dev = common.std_deviation(bg_array, round_val=round_val)
-    avg_glu = common.avg(bg_array, round_val=round_val)
-    return round(std_dev / avg_glu * 100, round_val)
-
-
 def gmi(bg_array, round_val=2):
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
     A1C level that would be expected based on mean glucose measured
+    Reference - Glucose Management Indicator (GMI) - https://www.jaeb.org/gmi/
 
     Parameters
     ----------

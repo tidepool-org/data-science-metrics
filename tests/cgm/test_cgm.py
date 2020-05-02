@@ -1,7 +1,6 @@
 import pytest
 from tidepool_data_science_metrics.cgm.cgm import (
     percent_values_by_range,
-    cv_of_glucose,
     gmi,
     bgri,
     episodes,
@@ -60,16 +59,6 @@ def test_gmi(bg_array):
 def test_gmi_round(bg_array):
     gmi_value = gmi(bg_array, 3)
     assert gmi_value == 5.432
-
-
-def test_cv_of_glucose(bg_array):
-    std = cv_of_glucose(bg_array)
-    assert std == 24.9
-
-
-def test_cv_of_glucose_round(bg_array):
-    std = cv_of_glucose(bg_array, 3)
-    assert std == 24.891
 
 
 def test_get_bgri(bg_array):

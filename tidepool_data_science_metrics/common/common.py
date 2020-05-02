@@ -45,8 +45,8 @@ def avg(bg_array, weights=None, returned=False, round_val=2):
     int
         The calculated Average
     """
-
-    return round(np.average(bg_array, weights=weights, returned=returned), round_val)
+    val = np.average(bg_array, weights=weights, returned=returned)
+    return np.around(val, round_val)
 
 
 def std_deviation(bg_array, round_val=2):
@@ -67,3 +67,24 @@ def std_deviation(bg_array, round_val=2):
     """
 
     return round(np.std(bg_array), round_val)
+
+
+def coefficient_of_variation(bg_array, round_val=2):
+    """
+    Calculate the coefficient of variation on set of glucose values
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with `int` type.
+    round_val : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The calculated Coefficient of variation
+    """
+    std_dev = std_deviation(bg_array, round_val=round_val)
+    avg_glu = avg(bg_array, round_val=round_val)
+    return round(std_dev / avg_glu * 100, round_val)
