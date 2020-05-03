@@ -2,10 +2,12 @@ import pytest
 import pandas as pd
 import numpy as np
 import os
+from pathlib import Path
 
 
 @pytest.fixture
 def bg_array(scope="module"):
+    print("this path : ", Path(__file__).parent.resolve())
     print("path is : ", os.getcwd())
     return np.genfromtxt("../bg_array.csv", delimiter=",")
 
