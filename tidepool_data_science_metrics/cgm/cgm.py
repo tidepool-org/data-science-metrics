@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Tuple
+import warnings
 
 import tidepool_data_science_metrics.common.common as common
 
@@ -22,6 +23,7 @@ def gmi(bg_array, round_val=2):
     int
         The calculated Glucose Management Indicator
     """
+    _validate_bg(bg_array)
     gmi = 3.31 + (0.02392 * common.mean(bg_array))
     return round(gmi, round_val)
 
@@ -247,3 +249,16 @@ def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, in
     if lower_threshold > upper_threshold:
         raise Exception("lower threshold is higher than the upper threshold.")
     return lower_threshold, upper_threshold
+
+
+def _validate_bg(bg_array):
+    t = (bg_array < 25).any()
+    if (bg_array < 25).any():
+        warnings.warn(
+            "Some values in the passed in array had blood glucose values less than 25."
+        )
+
+    if (bg_array > 550).any():
+        warnings.warn(
+            "Some values in the passed in array had blood glucose values greater than 550."
+        )

@@ -9,6 +9,7 @@ from tidepool_data_science_metrics.cgm.cgm import (
     percent_time_below_54,
     percent_time_below_70,
     percent_time_above_180,
+    _validate_bg,
 )
 
 
@@ -56,12 +57,56 @@ def test_gmi(bg_array):
     assert gmi_value == 5.43
 
 
+def test_gmi_warning_low_and_high(bg_array_low_high):
+    with pytest.warns(UserWarning) as record:
+        gmi_value = gmi(bg_array_low_high)
+
+    # check that only one warning was raised
+    assert len(record) == 2
+    # check that the message matches
+    assert (
+        record[0].message.args[0]
+        == "Some values in the passed in array had blood glucose values less than 25."
+    )
+
+    # check that the message matches
+    assert (
+        record[1].message.args[0]
+        == "Some values in the passed in array had blood glucose values greater than 550."
+    )
+
+
+def test_gmi_warning_low(bg_array_low):
+    with pytest.warns(UserWarning) as record:
+        gmi_value = _validate_bg(bg_array_low)
+
+    assert len(record) == 1
+
+    assert (
+        record[0].message.args[0]
+        == "Some values in the passed in array had blood glucose values less than 25."
+    )
+
+
+def test_gmi_warning_high(bg_array_high):
+    with pytest.warns(UserWarning) as record:
+        gmi_value = _validate_bg(bg_array_high)
+
+    assert len(record) == 1
+
+    assert (
+        record[0].message.args[0]
+        == "Some values in the passed in array had blood glucose values greater than 550."
+    )
+
+
 def test_gmi_round(bg_array):
     gmi_value = gmi(bg_array, 3)
     assert gmi_value == 5.432
 
 
 def test_get_bgri(bg_array):
+
     LBGI, HBGI, BGRI = bgri(bg_array)
     assert BGRI == 3.54
     assert HBGI == 0.3
