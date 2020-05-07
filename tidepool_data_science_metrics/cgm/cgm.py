@@ -202,13 +202,13 @@ def episodes(bg_array, episodes_threshold: int, min_ct_per_ep=3, min_duration=5)
     while i > 0:
         check_string = check_string + f" & (np.roll(in_range, {i}) == 1) "
         i -= 1
-    in_range = np.where(bg_array[:, 1] < episodes_threshold, 1, 0)
+    in_range = np.where(bg_array < episodes_threshold, 1, 0)
     episodes_count = np.count_nonzero(in_range[eval(check_string)])
 
     return episodes_count
 
 
-def bgri(bg_array, round_val=2):
+def blood_glucose_risk_index(bg_array, round_val=2):
     """
     Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
 

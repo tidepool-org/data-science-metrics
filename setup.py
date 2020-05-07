@@ -15,7 +15,7 @@ if sys.version_info < (3, 6):
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-version_string = "v0.0.4"
+version_string = "v0.0.5"
 
 setuptools.setup(
     name="Tidepool Data Science Metrics",
