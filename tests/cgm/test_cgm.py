@@ -180,9 +180,9 @@ def test_percent_time_below_54_round(bg_array):
 
 def test_percent_time_above_250(bg_array):
     percent = percent_time_above_250(bg_array)
-    assert percent == 1.0
+    assert percent == 1.01
 
 
-def test_percent_time_above_250(bg_array):
+def test_percent_time_above_250_round(bg_array):
     percent = percent_time_above_250(bg_array, round_val=0)
     assert percent == 1
