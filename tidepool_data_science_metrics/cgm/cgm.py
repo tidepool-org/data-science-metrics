@@ -5,7 +5,7 @@ import warnings
 import tidepool_data_science_metrics.common.common as common
 
 
-def gmi(bg_array: "np.ndarray[np.int64]", round_val: int = 2) -> np.float64:
+def gmi(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> np.float64:
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
     A1C level that would be expected based on mean glucose measured
@@ -15,7 +15,7 @@ def gmi(bg_array: "np.ndarray[np.int64]", round_val: int = 2) -> np.float64:
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -25,14 +25,14 @@ def gmi(bg_array: "np.ndarray[np.int64]", round_val: int = 2) -> np.float64:
     """
     _validate_bg(bg_array)
     gmi = 3.31 + (0.02392 * common.mean(bg_array))
-    return round(gmi, round_val)
+    return round(gmi, round_to_ndigits)
 
 
 def percent_values_by_range(
     bg_array: "np.ndarray[np.int64]",
     lower_threshold: int == 1,
     upper_threshold: int == 1000,
-    round_val: int = 2,
+    round_to_ndigits: int = 2,
 ) -> np.float64:
     """
     Calculate the percent of bg values are within the lower and upper thresholds.
@@ -46,7 +46,7 @@ def percent_values_by_range(
         The the lower value in the range to calculate on.
     upper_threshold : int
         zThe the upper value in the range to calculate on.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -55,23 +55,15 @@ def percent_values_by_range(
         The percent value by range.
     """
     _validate_bg(bg_array)
-    calc_low_thresh, calc_upper_thresh = _validate_input(
-        lower_threshold, upper_threshold
-    )
+    calc_low_thresh, calc_upper_thresh = _validate_input(lower_threshold, upper_threshold)
     results = round(
-        np.where(
-            (bg_array <= calc_upper_thresh) & (bg_array >= calc_low_thresh), 1, 0
-        ).sum()
-        / bg_array.size
-        * 100,
-        round_val,
+        np.where((bg_array <= calc_upper_thresh) & (bg_array >= calc_low_thresh), 1, 0).sum() / bg_array.size * 100,
+        round_to_ndigits,
     )
     return results
 
 
-def percent_time_in_range_70_180(
-    bg_array: "np.ndarray[np.int64]", round_val: int = 2
-) -> np.float64:
+def percent_time_in_range_70_180(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> np.float64:
     """
     Calculate the percent of values with a blood glucose value between 70 and 180.
 
@@ -79,7 +71,7 @@ def percent_time_in_range_70_180(
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -87,14 +79,10 @@ def percent_time_in_range_70_180(
     int
         The percent value with in the range between 70 and 180.
     """
-    return percent_values_by_range(
-        bg_array, lower_threshold=70, upper_threshold=180, round_val=round_val
-    )
+    return percent_values_by_range(bg_array, lower_threshold=70, upper_threshold=180, round_to_ndigits=round_to_ndigits)
 
 
-def percent_time_above_180(
-    bg_array: "np.ndarray[np.int64]", round_val: int = 2
-) -> np.float64:
+def percent_time_above_180(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> np.float64:
     """
     Calculate the percent of values with a blood glucose above 180.
 
@@ -102,7 +90,7 @@ def percent_time_above_180(
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -111,13 +99,11 @@ def percent_time_above_180(
         The percent values above 180.
     """
     return percent_values_by_range(
-        bg_array, lower_threshold=180, upper_threshold=1000, round_val=round_val
+        bg_array, lower_threshold=180, upper_threshold=1000, round_to_ndigits=round_to_ndigits
     )
 
 
-def percent_time_below_70(
-    bg_array: "np.ndarray[np.int64]", round_val: int = 2
-) -> np.float64:
+def percent_time_below_70(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> np.float64:
     """
     Calculate the percent of values with a blood glucose below 70.
 
@@ -125,7 +111,7 @@ def percent_time_below_70(
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -133,14 +119,10 @@ def percent_time_below_70(
     int
         The percent values below 70.
     """
-    return percent_values_by_range(
-        bg_array, lower_threshold=0, upper_threshold=70, round_val=round_val
-    )
+    return percent_values_by_range(bg_array, lower_threshold=0, upper_threshold=70, round_to_ndigits=round_to_ndigits)
 
 
-def percent_time_below_54(
-    bg_array: "np.ndarray[np.int64]", round_val: int = 2
-) -> np.float64:
+def percent_time_below_54(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> np.float64:
     """
     Calculate the percent of values with a blood glucose below 54.
 
@@ -148,7 +130,7 @@ def percent_time_below_54(
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -157,14 +139,10 @@ def percent_time_below_54(
         The percent values below 54.
     """
     _validate_bg(bg_array)
-    return percent_values_by_range(
-        bg_array, lower_threshold=0, upper_threshold=54, round_val=round_val
-    )
+    return percent_values_by_range(bg_array, lower_threshold=0, upper_threshold=54, round_to_ndigits=round_to_ndigits)
 
 
-def percent_time_above_250(
-    bg_array: "np.ndarray[np.int64]", round_val: int = 2
-) -> np.float64:
+def percent_time_above_250(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> np.float64:
     """
     Calculate the percent of values with a blood glucose above 250.
 
@@ -172,7 +150,7 @@ def percent_time_above_250(
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -181,15 +159,12 @@ def percent_time_above_250(
         The percent values above 250.
     """
     return percent_values_by_range(
-        bg_array, lower_threshold=250, upper_threshold=1000, round_val=round_val
+        bg_array, lower_threshold=250, upper_threshold=1000, round_to_ndigits=round_to_ndigits
     )
 
 
 def episodes(
-    bg_array: "np.ndarray[np.int64]",
-    episodes_threshold: int,
-    min_ct_per_ep: int = 3,
-    min_duration: int = 5,
+    bg_array: "np.ndarray[np.int64]", episodes_threshold: int, min_ct_per_ep: int = 3, min_duration: int = 5,
 ) -> np.float64:
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
@@ -228,9 +203,7 @@ def episodes(
     return episodes_count
 
 
-def blood_glucose_risk_index(
-    bg_array: "np.ndarray[np.int64]", round_val: int = 2
-) -> Tuple[float, float, float]:
+def blood_glucose_risk_index(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2) -> Tuple[float, float, float]:
     """
     Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
 
@@ -238,7 +211,7 @@ def blood_glucose_risk_index(
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -260,8 +233,8 @@ def blood_glucose_risk_index(
     rhBG = risk_power * high_risk_bool
     LBGI = np.mean(rlBG)
     HBGI = np.mean(rhBG)
-    BGRI = round(LBGI + HBGI, round_val)
-    return round(np.mean(LBGI), round_val), round(np.mean(HBGI), round_val), BGRI
+    BGRI = round(LBGI + HBGI, round_to_ndigits)
+    return round(np.mean(LBGI), round_to_ndigits), round(np.mean(HBGI), round_to_ndigits), BGRI
 
 
 def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, int]:
@@ -274,21 +247,13 @@ def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, in
 
 def _validate_bg(bg_array: "np.ndarray[np.int64]"):
     if (bg_array < 38).any():
-        warnings.warn(
-            "Some values in the passed in array had blood glucose values less than 38."
-        )
+        warnings.warn("Some values in the passed in array had blood glucose values less than 38.")
 
     if (bg_array > 402).any():
-        warnings.warn(
-            "Some values in the passed in array had blood glucose values greater than 402."
-        )
+        warnings.warn("Some values in the passed in array had blood glucose values greater than 402.")
 
     if (bg_array < 1).any():
-        raise Exception(
-            "Some values in the passed in array had blood glucose values less than 1."
-        )
+        raise Exception("Some values in the passed in array had blood glucose values less than 1.")
 
     if (bg_array > 1000).any():
-        raise Exception(
-            "Some values in the passed in array had blood glucose values greater than 1000."
-        )
+        raise Exception("Some values in the passed in array had blood glucose values greater than 1000.")
