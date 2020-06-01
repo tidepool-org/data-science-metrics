@@ -13,7 +13,7 @@ def test_avg_glucose(bg_array):
 
 
 def test_avg_glucose_round(bg_array):
-    average = avg(bg_array, round_val=0)
+    average = avg(bg_array, round_to_ndigits=0)
     assert average == 89
 
 
@@ -24,24 +24,24 @@ def test_avg_glucose_weights(bg_values__3_values):
 
 def test_mean_glucose(bg_array):
     val = mean(bg_array)
-    assert val == 88.62
+    assert val == 88.64
 
 
 def test_std_deviation(bg_array):
     std = std_deviation(bg_array)
-    assert std == 22.17
+    assert std == 22.32
 
 
 def test_std_deviation_round(bg_array):
     std = std_deviation(bg_array, 3)
-    assert std == 22.168
+    assert std == 22.316
 
 
 def test_coefficient_of_variation(bg_array):
     std = coefficient_of_variation(bg_array)
-    assert std == 25.02
+    assert std == 25.18
 
 
 def test_coefficient_of_variation_round(bg_array):
     std = coefficient_of_variation(bg_array, 3)
-    assert std == 25.016
+    assert std == 25.177

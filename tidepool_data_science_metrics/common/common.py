@@ -2,7 +2,7 @@ import numpy as np
 from typing import List
 
 
-def mean(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
+def mean(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2):
     """
     Calculate the mean within a set of glucose values
 
@@ -10,7 +10,7 @@ def mean(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -18,14 +18,14 @@ def mean(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
     int
         The calculated Means
     """
-    return round(np.mean(bg_array), round_val)
+    return round(np.mean(bg_array), round_to_ndigits)
 
 
 def avg(
     bg_array: "np.ndarray[np.int64]",
     weights: List[int] = None,
     returned: bool = False,
-    round_val: int = 2,
+    round_to_ndigits: int = 2,
 ):
     """
     Calculate the average within a set of glucose values
@@ -43,7 +43,7 @@ def avg(
         Default is False. If True, the tuple (average, sum_of_weights) is returned, otherwise only the average is
         returned. If weights=None, sum_of_weights is equivalent to the number of elements over which the average
         is taken.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -52,10 +52,10 @@ def avg(
         The calculated Average
     """
     val = np.average(bg_array, weights=weights, returned=returned)
-    return np.round(val, round_val)
+    return np.round(val, round_to_ndigits)
 
 
-def std_deviation(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
+def std_deviation(bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2):
     """
     Calculate the standard deviation within a set of glucose values
 
@@ -63,7 +63,7 @@ def std_deviation(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -72,10 +72,12 @@ def std_deviation(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
         Calculated standard deviation
     """
 
-    return round(np.std(bg_array), round_val)
+    return round(np.std(bg_array), round_to_ndigits)
 
 
-def coefficient_of_variation(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
+def coefficient_of_variation(
+    bg_array: "np.ndarray[np.int64]", round_to_ndigits: int = 2
+):
     """
     Calculate the coefficient of variation on set of glucose values
 
@@ -83,7 +85,7 @@ def coefficient_of_variation(bg_array: "np.ndarray[np.int64]", round_val: int = 
     ----------
     bg_array : ndarray
         1D array containing data with `int` type.
-    round_val : int, optional
+    round_to_ndigits : int, optional
         The number of digits to round the result to.
 
     Returns
@@ -91,6 +93,6 @@ def coefficient_of_variation(bg_array: "np.ndarray[np.int64]", round_val: int = 
     int
         The calculated Coefficient of variation
     """
-    std_dev = std_deviation(bg_array, round_val=round_val)
-    avg_glu = avg(bg_array, round_val=round_val)
-    return round(std_dev / avg_glu * 100, round_val)
+    std_dev = std_deviation(bg_array, round_to_ndigits=round_to_ndigits)
+    avg_glu = avg(bg_array, round_to_ndigits=round_to_ndigits)
+    return round(std_dev / avg_glu * 100, round_to_ndigits)

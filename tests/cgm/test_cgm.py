@@ -15,7 +15,7 @@ from tidepool_data_science_metrics.cgm.cgm import (
 
 def test_percent_values_by_range(bg_array):
     percent = percent_values_by_range(bg_array, 0, 100)
-    assert percent == 82.83
+    assert percent == 78.79
 
 
 def test_invalid_lower_number(bg_array):
@@ -102,21 +102,21 @@ def test_gmi_warning_high(bg_array_high):
 
 def test_gmi_round(bg_array):
     gmi_value = gmi(bg_array, 4)
-    assert gmi_value == 5.4298
+    assert gmi_value == 5.4303
 
 
 def test_blood_glucose_risk_index(bg_array):
 
     LBGI, HBGI, BGRI = blood_glucose_risk_index(bg_array)
-    assert BGRI == 3.57
+    assert BGRI == 3.58
     assert HBGI == 0.31
     assert LBGI == 3.27
 
 
 def test_blood_glucose_risk_index_round(bg_array):
     LBGI, HBGI, BGRI = blood_glucose_risk_index(bg_array, 3)
-    assert BGRI == 3.574
-    assert HBGI == 0.307
+    assert BGRI == 3.579
+    assert HBGI == 0.311
     assert LBGI == 3.267
 
 
@@ -140,12 +140,12 @@ def test_episodes_nonconsecutive(get_episodes_array):
 
 def test_percent_time_in_range_70_180(bg_array):
     percent = percent_time_in_range_70_180(bg_array)
-    assert percent == 95.96
+    assert percent == 94.95
 
 
 def test_percent_time_in_range_70_180_round(bg_array):
-    percent = percent_time_in_range_70_180(bg_array, round_val=0)
-    assert percent == 96
+    percent = percent_time_in_range_70_180(bg_array, round_to_ndigits=0)
+    assert percent == 95.0
 
 
 def test_percent_time_above_180(bg_array):
@@ -155,18 +155,18 @@ def test_percent_time_above_180(bg_array):
 
 
 def test_percent_time_above_180_round(bg_array):
-    percent = percent_time_above_180(bg_array, round_val=0)
+    percent = percent_time_above_180(bg_array, round_to_ndigits=0)
     assert 2 == percent
 
 
 def test_percent_time_below_70(bg_array):
     percent = percent_time_below_70(bg_array)
-    assert percent == 3.03
+    assert percent == 2.02
 
 
 def test_percent_time_below_70_round(bg_array):
-    percent = percent_time_below_70(bg_array, round_val=0)
-    assert percent == 3
+    percent = percent_time_below_70(bg_array, round_to_ndigits=0)
+    assert percent == 2.0
 
 
 def test_percent_time_below_54(bg_array):
@@ -175,7 +175,7 @@ def test_percent_time_below_54(bg_array):
 
 
 def test_percent_time_below_54_round(bg_array):
-    percent = percent_time_below_54(bg_array, round_val=0)
+    percent = percent_time_below_54(bg_array, round_to_ndigits=0)
     assert percent == 1
 
 
@@ -185,7 +185,7 @@ def test_percent_time_above_250(bg_array):
 
 
 def test_percent_time_above_250_round(bg_array):
-    percent = percent_time_above_250(bg_array, round_val=0)
+    percent = percent_time_above_250(bg_array, round_to_ndigits=0)
     assert percent == 1
 
 
@@ -205,3 +205,12 @@ def test_invalid_lower_greater_than_1000(bg_array_greater_than_1000):
         "Some values in the passed in array had blood glucose values greater than 1000."
         in str(excinfo.value)
     )
+
+
+def test_percent_time_across_multiple_functions(bg_array):
+    total = (
+        percent_time_below_70(bg_array, round_to_ndigits=0)
+        + percent_values_by_range(bg_array, 69.99, 180.99, round_to_ndigits=0)
+        + percent_time_above_180(bg_array, round_to_ndigits=0)
+    )
+    assert total == 100
