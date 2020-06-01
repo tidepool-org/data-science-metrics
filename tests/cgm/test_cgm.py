@@ -14,8 +14,8 @@ from tidepool_data_science_metrics.cgm.cgm import (
 
 
 def test_percent_values_by_range(bg_array):
-    percent = percent_values_by_range(bg_array, 100, 0)
-    assert percent == 21.21
+    percent = percent_values_by_range(bg_array, 0, 100)
+    assert percent == 82.83
 
 
 def test_invalid_lower_number(bg_array):
@@ -66,13 +66,13 @@ def test_gmi_warning_low_and_high(bg_array_low_high):
     # check that the message matches
     assert (
         record[0].message.args[0]
-        == "Some values in the passed in array had blood glucose values less than 25."
+        == "Some values in the passed in array had blood glucose values less than 38."
     )
 
     # check that the message matches
     assert (
         record[1].message.args[0]
-        == "Some values in the passed in array had blood glucose values greater than 550."
+        == "Some values in the passed in array had blood glucose values greater than 402."
     )
 
 
@@ -84,7 +84,7 @@ def test_gmi_warning_low(bg_array_low):
 
     assert (
         record[0].message.args[0]
-        == "Some values in the passed in array had blood glucose values less than 25."
+        == "Some values in the passed in array had blood glucose values less than 38."
     )
 
 
@@ -96,7 +96,7 @@ def test_gmi_warning_high(bg_array_high):
 
     assert (
         record[0].message.args[0]
-        == "Some values in the passed in array had blood glucose values greater than 550."
+        == "Some values in the passed in array had blood glucose values greater than 402."
     )
 
 
@@ -108,7 +108,7 @@ def test_gmi_round(bg_array):
 def test_blood_glucose_risk_index(bg_array):
 
     LBGI, HBGI, BGRI = blood_glucose_risk_index(bg_array)
-    assert BGRI == 3.58
+    assert BGRI == 3.57
     assert HBGI == 0.31
     assert LBGI == 3.27
 
@@ -150,6 +150,7 @@ def test_percent_time_in_range_70_180_round(bg_array):
 
 def test_percent_time_above_180(bg_array):
     percent = percent_time_above_180(bg_array)
+    typeo = type(percent)
     assert percent == 2.02
 
 
@@ -186,3 +187,21 @@ def test_percent_time_above_250(bg_array):
 def test_percent_time_above_250_round(bg_array):
     percent = percent_time_above_250(bg_array, round_val=0)
     assert percent == 1
+
+
+def test_invalid_lower_less_than_1(bg_array_less_than_one):
+    with pytest.raises(Exception) as excinfo:
+        percent_values_by_range(bg_array_less_than_one, 0, 1001)
+    assert (
+        "Some values in the passed in array had blood glucose values less than 1."
+        in str(excinfo.value)
+    )
+
+
+def test_invalid_lower_greater_than_1000(bg_array_greater_than_1000):
+    with pytest.raises(Exception) as excinfo:
+        percent_values_by_range(bg_array_greater_than_1000, 0, 1001)
+    assert (
+        "Some values in the passed in array had blood glucose values greater than 1000."
+        in str(excinfo.value)
+    )

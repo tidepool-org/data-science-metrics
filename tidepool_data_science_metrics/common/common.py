@@ -1,7 +1,8 @@
 import numpy as np
+from typing import List
 
 
-def mean(bg_array, round_val=2):
+def mean(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
     """
     Calculate the mean within a set of glucose values
 
@@ -20,7 +21,12 @@ def mean(bg_array, round_val=2):
     return round(np.mean(bg_array), round_val)
 
 
-def avg(bg_array, weights=None, returned=False, round_val=2):
+def avg(
+    bg_array: "np.ndarray[np.int64]",
+    weights: List[int] = None,
+    returned: bool = False,
+    round_val: int = 2,
+):
     """
     Calculate the average within a set of glucose values
 
@@ -46,10 +52,10 @@ def avg(bg_array, weights=None, returned=False, round_val=2):
         The calculated Average
     """
     val = np.average(bg_array, weights=weights, returned=returned)
-    return np.around(val, round_val)
+    return np.round(val, round_val)
 
 
-def std_deviation(bg_array, round_val=2):
+def std_deviation(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
     """
     Calculate the standard deviation within a set of glucose values
 
@@ -69,7 +75,7 @@ def std_deviation(bg_array, round_val=2):
     return round(np.std(bg_array), round_val)
 
 
-def coefficient_of_variation(bg_array, round_val=2):
+def coefficient_of_variation(bg_array: "np.ndarray[np.int64]", round_val: int = 2):
     """
     Calculate the coefficient of variation on set of glucose values
 

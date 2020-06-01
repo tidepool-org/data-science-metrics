@@ -5,7 +5,7 @@ import warnings
 import tidepool_data_science_metrics.common.common as common
 
 
-def gmi(bg_array, round_val=2):
+def gmi(bg_array: "np.ndarray[np.int64]", round_val: int = 2) -> np.float64:
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
     A1C level that would be expected based on mean glucose measured
@@ -29,10 +29,13 @@ def gmi(bg_array, round_val=2):
 
 
 def percent_values_by_range(
-    bg_array, lower_threshold: int, upper_threshold: int, round_val=2
-):
+    bg_array: "np.ndarray[np.int64]",
+    lower_threshold: int == 1,
+    upper_threshold: int == 1000,
+    round_val: int = 2,
+) -> np.float64:
     """
-    Calculate the percent of values that match has a bg within the lower and upper threshold.
+    Calculate the percent of bg values are within the lower and upper thresholds.
     The lower and upper values will be included in the range to calculate on.
 
     Parameters
@@ -51,7 +54,7 @@ def percent_values_by_range(
     int
         The percent value by range.
     """
-
+    _validate_bg(bg_array)
     calc_low_thresh, calc_upper_thresh = _validate_input(
         lower_threshold, upper_threshold
     )
@@ -66,7 +69,9 @@ def percent_values_by_range(
     return results
 
 
-def percent_time_in_range_70_180(bg_array, round_val=2):
+def percent_time_in_range_70_180(
+    bg_array: "np.ndarray[np.int64]", round_val: int = 2
+) -> np.float64:
     """
     Calculate the percent of values with a blood glucose value between 70 and 180.
 
@@ -87,7 +92,9 @@ def percent_time_in_range_70_180(bg_array, round_val=2):
     )
 
 
-def percent_time_above_180(bg_array, round_val=2):
+def percent_time_above_180(
+    bg_array: "np.ndarray[np.int64]", round_val: int = 2
+) -> np.float64:
     """
     Calculate the percent of values with a blood glucose above 180.
 
@@ -108,7 +115,9 @@ def percent_time_above_180(bg_array, round_val=2):
     )
 
 
-def percent_time_below_70(bg_array, round_val=2):
+def percent_time_below_70(
+    bg_array: "np.ndarray[np.int64]", round_val: int = 2
+) -> np.float64:
     """
     Calculate the percent of values with a blood glucose below 70.
 
@@ -129,7 +138,9 @@ def percent_time_below_70(bg_array, round_val=2):
     )
 
 
-def percent_time_below_54(bg_array, round_val=2):
+def percent_time_below_54(
+    bg_array: "np.ndarray[np.int64]", round_val: int = 2
+) -> np.float64:
     """
     Calculate the percent of values with a blood glucose below 54.
 
@@ -145,12 +156,15 @@ def percent_time_below_54(bg_array, round_val=2):
     int
         The percent values below 54.
     """
+    _validate_bg(bg_array)
     return percent_values_by_range(
         bg_array, lower_threshold=0, upper_threshold=54, round_val=round_val
     )
 
 
-def percent_time_above_250(bg_array, round_val=2):
+def percent_time_above_250(
+    bg_array: "np.ndarray[np.int64]", round_val: int = 2
+) -> np.float64:
     """
     Calculate the percent of values with a blood glucose above 250.
 
@@ -167,11 +181,16 @@ def percent_time_above_250(bg_array, round_val=2):
         The percent values above 250.
     """
     return percent_values_by_range(
-        bg_array, lower_threshold=250, upper_threshold=0, round_val=round_val
+        bg_array, lower_threshold=250, upper_threshold=1000, round_val=round_val
     )
 
 
-def episodes(bg_array, episodes_threshold: int, min_ct_per_ep=3, min_duration=5):
+def episodes(
+    bg_array: "np.ndarray[np.int64]",
+    episodes_threshold: int,
+    min_ct_per_ep: int = 3,
+    min_duration: int = 5,
+) -> np.float64:
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
     How the episode count it calculated.
@@ -197,6 +216,7 @@ def episodes(bg_array, episodes_threshold: int, min_ct_per_ep=3, min_duration=5)
     int
         The number of episodes matching input specifications.
     """
+    _validate_bg(bg_array)
     check_string = "(in_range == 1) & (np.roll(in_range, -1) == 0) "
     i = min_ct_per_ep - 1
     while i > 0:
@@ -208,7 +228,9 @@ def episodes(bg_array, episodes_threshold: int, min_ct_per_ep=3, min_duration=5)
     return episodes_count
 
 
-def blood_glucose_risk_index(bg_array, round_val=2):
+def blood_glucose_risk_index(
+    bg_array: "np.ndarray[np.int64]", round_val: int = 2
+) -> Tuple[float, float, float]:
     """
     Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
 
@@ -228,6 +250,7 @@ def blood_glucose_risk_index(bg_array, round_val=2):
     int
         The number BRGI results.
     """
+    _validate_bg(bg_array)
     bg_array[bg_array < 1] = 1  # this is added to take care of edge case BG <= 0
     transformed_bg = 1.509 * ((np.log(bg_array) ** 1.084) - 5.381)
     risk_power = 10 * (transformed_bg) ** 2
@@ -235,30 +258,37 @@ def blood_glucose_risk_index(bg_array, round_val=2):
     high_risk_bool = transformed_bg > 0
     rlBG = risk_power * low_risk_bool
     rhBG = risk_power * high_risk_bool
-    LBGI = round(np.mean(rlBG), round_val)
-    HBGI = round(np.mean(rhBG), round_val)
+    LBGI = np.mean(rlBG)
+    HBGI = np.mean(rhBG)
     BGRI = round(LBGI + HBGI, round_val)
-    return LBGI, HBGI, BGRI
+    return round(np.mean(LBGI), round_val), round(np.mean(HBGI), round_val), BGRI
 
 
 def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, int]:
     if any(num < 0 for num in [lower_threshold, upper_threshold]):
         raise Exception("lower and upper thresholds must be a non-negative number")
-    if upper_threshold == 0:
-        upper_threshold = 1000
     if lower_threshold > upper_threshold:
         raise Exception("lower threshold is higher than the upper threshold.")
     return lower_threshold, upper_threshold
 
 
-def _validate_bg(bg_array):
-    t = (bg_array < 25).any()
-    if (bg_array < 25).any():
+def _validate_bg(bg_array: "np.ndarray[np.int64]"):
+    if (bg_array < 38).any():
         warnings.warn(
-            "Some values in the passed in array had blood glucose values less than 25."
+            "Some values in the passed in array had blood glucose values less than 38."
         )
 
-    if (bg_array > 550).any():
+    if (bg_array > 402).any():
         warnings.warn(
-            "Some values in the passed in array had blood glucose values greater than 550."
+            "Some values in the passed in array had blood glucose values greater than 402."
+        )
+
+    if (bg_array < 1).any():
+        raise Exception(
+            "Some values in the passed in array had blood glucose values less than 1."
+        )
+
+    if (bg_array > 1000).any():
+        raise Exception(
+            "Some values in the passed in array had blood glucose values greater than 1000."
         )

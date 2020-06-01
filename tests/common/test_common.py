@@ -17,7 +17,6 @@ def test_avg_glucose_round(bg_array):
     assert average == 89
 
 
-"""
 def test_avg_glucose_weights(bg_values__3_values):
     average = avg(bg_values__3_values, weights=[[0], [1], [0]])
     assert average == 105
@@ -46,4 +45,3 @@ def test_coefficient_of_variation(bg_array):
 def test_coefficient_of_variation_round(bg_array):
     std = coefficient_of_variation(bg_array, 3)
     assert std == 25.016
-"""

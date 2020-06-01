@@ -7,7 +7,7 @@ from pathlib import Path
 
 @pytest.fixture
 def bg_array(scope="module"):
-    df = pd.read_csv(f"{Path(__file__).parent.resolve()}/bg_array.csv")
+    df = pd.read_csv(f"{Path(__file__).parent.resolve()}/../data/tests/bg_array.csv")
     ##df = pd.read_csv(f"{Path(__file__).parent.resolve()}/bg-array-sample.csv")
     return df.to_numpy()
 
@@ -34,12 +34,26 @@ def bg_array_high(scope="module"):
 
 
 @pytest.fixture
+def bg_array_less_than_one(scope="module"):
+    return np.array([[150], [0], [100], [90], [333]])
+
+
+@pytest.fixture
+def bg_array_greater_than_1000(scope="module"):
+    return np.array([[150], [1001], [100], [90], [551]])
+
+
+@pytest.fixture
 def get_date_ep_array(scope="module"):
-    df = pd.read_csv(f"{Path(__file__).parent.resolve()}/date_ep_values.csv")
+    df = pd.read_csv(
+        f"{Path(__file__).parent.resolve()}/../data/tests/date_ep_values.csv"
+    )
     return df.to_numpy(dtype=object)
 
 
 @pytest.fixture
 def get_episodes_array(scope="module"):
-    df = pd.read_csv(f"{Path(__file__).parent.resolve()}/episodes_values.csv")
+    df = pd.read_csv(
+        f"{Path(__file__).parent.resolve()}/../data/tests/episodes_values.csv"
+    )
     return df.to_numpy(dtype=object)

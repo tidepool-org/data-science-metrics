@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import setuptools
-import os
-import glob
-import shutil
 import sys
 
 
@@ -40,30 +37,3 @@ setuptools.setup(
     ],
     install_requires=["numpy>=1.18.1", "pandas>=1.0.1",],
 )
-
-
-# %% CLEAN UP
-# remove the excess files if package is installed with pip from github
-# TODO: make tidals its own repository under tidepool_org
-# once tidals becomes its own github repository, then this step will no longer be necessary
-# TODO: publish tidals as a PyPi pacakge
-
-files = glob.glob(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "*")))
-
-hidFiles = glob.glob(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".*"))
-)
-
-allFiles = files + hidFiles
-
-# if loaded from github with pip in environmental.yml, then when it will
-# create a source file (src) and clone the entire data-analytics repo
-for i in allFiles:
-    # make sure you are in the src/tidals/ directory
-    if "src" in i.split(sep=os.sep)[-3]:
-        # delete all BUT files in tidals package
-        if "tidepool-analysis-tools" not in i:
-            if os.path.isdir(i):
-                shutil.rmtree(i)
-            else:
-                os.remove(i)

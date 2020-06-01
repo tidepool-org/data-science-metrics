@@ -9,13 +9,6 @@ Data Science Metrics
 ## Project Intro/Objective
 The purpose of this project is to package all common metrics used in data science projects. 
 
-### Methods Used
-* Inferential Statistics
-* Machine Learning
-* Data Visualization
-* Predictive Modeling
-* etc.
-
 ### Technologies
 * Python
 * Numpy
