@@ -78,7 +78,7 @@ def percent_values_ge_70_le_180(
 ) -> np.float64:
     """
     Calculate the percent of values with a glucose values that are
-    greater-than-or-equal-to (ge) 70 and less-than-or-equal-to (le) 180.
+    greater-than-or-equal-to (ge) 70 and less-than-or-equal-to (le) 180 mg/dL.
 
     Parameters
     ----------
@@ -106,7 +106,7 @@ def percent_values_gt_180(
     bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a glucose greater than (gt) 180.
+    Calculate the percent of values greater than (gt) 180 mg/dL.
 
     Parameters
     ----------
@@ -117,7 +117,7 @@ def percent_values_gt_180(
 
     Returns
     -------
-    int
+    float
         The percent values above 180.
     """
     return percent_values_by_range(
@@ -129,11 +129,11 @@ def percent_values_gt_180(
     )
 
 
-def percent_time_below_70(
+def percent_values_lt_70(
     bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a glucose below 70.
+    Calculate the percent of values less than (lt) 70 mg/dL.
 
     Parameters
     ----------
@@ -151,6 +151,7 @@ def percent_time_below_70(
         bg_array,
         lower_bound=1,
         upper_bound=70,
+        upper_bound_operator=operator.lt,
         round_to_n_digits=round_to_n_digits,
     )
 

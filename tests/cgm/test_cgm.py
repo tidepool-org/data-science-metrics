@@ -8,7 +8,7 @@ from tidepool_data_science_metrics.cgm.cgm import (
     percent_values_ge_70_le_180,
     percent_time_above_250,
     percent_time_below_54,
-    percent_time_below_70,
+    percent_values_lt_70,
     percent_values_gt_180,
     _validate_bg,
 )
@@ -177,17 +177,21 @@ def test_percent_time_above_180_round(bg_array):
     percent = percent_values_gt_180(bg_array, round_to_n_digits=0)
     assert 2 == percent
 
+def test_percent_values_lt_70_around_70():
+    bg_array = np.array([40, 69.99999, 70, 70.00000001])
+    percent = percent_values_lt_70(bg_array)
+    assert percent == 50
 
-# def test_percent_time_below_70(bg_array):
-#     percent = percent_time_below_70(bg_array)
-#     assert percent == 2.02
-#
-#
-# def test_percent_time_below_70_round(bg_array):
-#     percent = percent_time_below_70(bg_array, round_to_n_digits=0)
-#     assert percent == 2.0
-#
-#
+def test_percent_time_below_70(bg_array):
+    percent = percent_values_lt_70(bg_array)
+    assert percent == 2.02
+
+
+def test_percent_time_below_70_round(bg_array):
+    percent = percent_values_lt_70(bg_array, round_to_n_digits=0)
+    assert percent == 2.0
+
+
 # def test_percent_time_below_54(bg_array):
 #     percent = percent_time_below_54(bg_array)
 #     assert percent == 1.01
@@ -228,7 +232,7 @@ def test_invalid_lower_greater_than_1000(bg_array_greater_than_1000):
 
 # def test_percent_time_across_multiple_functions(bg_array):
 #     total = (
-#         percent_time_below_70(bg_array, round_to_n_digits=0)
+#         percent_values_lt_70(bg_array, round_to_n_digits=0)
 #         + percent_values_by_range(bg_array, 69.99, 180.99, round_to_n_digits=0)
 #         + percent_values_gt_180(bg_array, round_to_n_digits=0)
 #     )
