@@ -6,10 +6,11 @@ from tidepool_data_science_metrics.cgm.cgm import (
     blood_glucose_risk_index,
     episodes,
     percent_values_ge_70_le_180,
-    percent_time_above_250,
-    percent_time_below_54,
+    percent_values_lt_40,
+    percent_values_lt_54,
     percent_values_lt_70,
     percent_values_gt_180,
+    percent_time_above_250,
     _validate_bg,
 )
 
@@ -191,17 +192,27 @@ def test_percent_time_below_70_round(bg_array):
     percent = percent_values_lt_70(bg_array, round_to_n_digits=0)
     assert percent == 2.0
 
+def test_percent_values_lt_54_around_54():
+    bg_array = np.array([40, 53.99999, 54, 54.00000001])
+    percent = percent_values_lt_54(bg_array)
+    assert percent == 50
 
-# def test_percent_time_below_54(bg_array):
-#     percent = percent_time_below_54(bg_array)
-#     assert percent == 1.01
-#
-#
-# def test_percent_time_below_54_round(bg_array):
-#     percent = percent_time_below_54(bg_array, round_to_n_digits=0)
-#     assert percent == 1
-#
-#
+def test_percent_time_below_54(bg_array):
+    percent = percent_values_lt_54(bg_array)
+    assert percent == 1.01
+
+
+def test_percent_time_below_54_round(bg_array):
+    percent = percent_values_lt_54(bg_array, round_to_n_digits=0)
+    assert percent == 1
+
+
+def test_percent_values_lt_40_around_40():
+    bg_array = np.array([39, 39.99999, 40, 40.00000001])
+    percent = percent_values_lt_40(bg_array)
+    assert percent == 50
+
+
 # def test_percent_time_above_250(bg_array):
 #     percent = percent_time_above_250(bg_array)
 #     assert percent == 1.01

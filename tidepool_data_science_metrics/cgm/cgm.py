@@ -4,6 +4,8 @@ import warnings
 import operator
 import tidepool_data_science_metrics.common.common as common
 
+# TODO: allow these functions to take in a mmol/L in addition to mg/dL
+# TODO: allow these functions to operate on a matrix of glucose column arrays
 
 def gmi(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
@@ -63,7 +65,7 @@ def percent_values_by_range(
     float
         The percentage of values in the specified range.
     """
-    # TODO: allow this function to operate on a matrix of glucose column arrays
+
     _validate_bg(bg_array)
     _validate_input(lower_bound, upper_bound)
     n_meet_criteria = sum(lower_bound_operator(bg_array, lower_bound) & upper_bound_operator(bg_array, upper_bound))
@@ -156,11 +158,11 @@ def percent_values_lt_70(
     )
 
 
-def percent_time_below_54(
+def percent_values_lt_54(
     bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a glucose below 54.
+    Calculate the percent of values less than (lt) 54 mg/dL.
 
     Parameters
     ----------
@@ -171,14 +173,42 @@ def percent_time_below_54(
 
     Returns
     -------
-    int
-        The percent values below 54.
+    float
+        The percent values less than 54 mg/dL.
     """
     _validate_bg(bg_array)
     return percent_values_by_range(
         bg_array,
-        lower_threshold=1,
-        upper_threshold=54,
+        lower_bound=1,
+        upper_bound=54,
+        upper_bound_operator=operator.lt,
+        round_to_n_digits=round_to_n_digits,
+    )
+
+def percent_values_lt_40(
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
+) -> np.float64:
+    """
+    Calculate the percent of values less than (lt) 40 mg/dL.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with  float or int type.
+    round_to_n_digits : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    float
+        The percent values less than 54 mg/dL.
+    """
+    _validate_bg(bg_array)
+    return percent_values_by_range(
+        bg_array,
+        lower_bound=1,
+        upper_bound=40,
+        upper_bound_operator=operator.lt,
         round_to_n_digits=round_to_n_digits,
     )
 
