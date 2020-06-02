@@ -126,11 +126,6 @@ def test_episodes_nonconsecutive(get_episodes_array):
 
 
 def test_percent_values_ge_70_le_180(bg_array):
-    percent = percent_values_ge_70_le_180(bg_array)
-    assert percent == 96
-
-
-def test_percent_values_ge_70_le_180(bg_array):
     percent = percent_values_ge_70_le_180(bg_array, round_to_n_digits=0)
     assert percent == 96
 
