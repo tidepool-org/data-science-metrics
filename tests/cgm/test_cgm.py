@@ -10,7 +10,9 @@ from tidepool_data_science_metrics.cgm.cgm import (
     percent_values_lt_54,
     percent_values_lt_70,
     percent_values_gt_180,
-    percent_time_above_250,
+    percent_values_gt_250,
+    percent_values_gt_300,
+    percent_values_gt_400,
     _validate_bg,
 )
 
@@ -213,16 +215,33 @@ def test_percent_values_lt_40_around_40():
     assert percent == 50
 
 
-# def test_percent_time_above_250(bg_array):
-#     percent = percent_time_above_250(bg_array)
-#     assert percent == 1.01
-#
-#
-# def test_percent_time_above_250_round(bg_array):
-#     percent = percent_time_above_250(bg_array, round_to_n_digits=0)
-#     assert percent == 1
-#
-#
+def test_percent_time_above_250_around_250():
+    bg_array = np.array([249.999999, 250, 250.000001, 400])
+    percent = percent_values_gt_250(bg_array)
+    assert percent == 50
+
+def test_percent_time_above_250(bg_array):
+    percent = percent_values_gt_250(bg_array)
+    assert percent == 1.01
+
+
+def test_percent_time_above_250_round(bg_array):
+    percent = percent_values_gt_250(bg_array, round_to_n_digits=0)
+    assert percent == 1
+
+
+def test_percent_time_above_300_around_300():
+    bg_array = np.array([299.999999, 300, 300.000001, 400])
+    percent = percent_values_gt_300(bg_array)
+    assert percent == 50
+
+
+def test_percent_time_above_400_around_400():
+    bg_array = np.array([399.999999, 400, 400.000001, 999])
+    percent = percent_values_gt_400(bg_array)
+    assert percent == 50
+
+
 def test_invalid_lower_less_than_1(bg_array_less_than_one):
     with pytest.raises(Exception) as excinfo:
         percent_values_by_range(bg_array_less_than_one, 0, 1001)

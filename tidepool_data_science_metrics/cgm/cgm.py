@@ -92,7 +92,7 @@ def percent_values_ge_70_le_180(
     Returns
     -------
     float
-        The percent value with in the range between 70 and 180.
+        The percent value with in the range between 70 and 180 mg/dL.
     """
     return percent_values_by_range(
         bg_array,
@@ -100,33 +100,6 @@ def percent_values_ge_70_le_180(
         lower_bound=70,
         upper_bound_operator=operator.le,
         upper_bound=180,
-        round_to_n_digits=round_to_n_digits,
-    )
-
-
-def percent_values_gt_180(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
-    """
-    Calculate the percent of values greater than (gt) 180 mg/dL.
-
-    Parameters
-    ----------
-    bg_array : ndarray
-        1D array containing data with  float or int type.
-    round_to_n_digits : int, optional
-        The number of digits to round the result to.
-
-    Returns
-    -------
-    float
-        The percent values above 180.
-    """
-    return percent_values_by_range(
-        bg_array,
-        lower_bound=180,
-        upper_bound=1000,
-        lower_bound_operator=operator.gt,
         round_to_n_digits=round_to_n_digits,
     )
 
@@ -213,11 +186,38 @@ def percent_values_lt_40(
     )
 
 
-def percent_time_above_250(
+def percent_values_gt_180(
     bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a glucose above 250.
+    Calculate the percent of values greater than (gt) 180 mg/dL.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with  float or int type.
+    round_to_n_digits : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    float
+        The percent values above 180.
+    """
+    return percent_values_by_range(
+        bg_array,
+        lower_bound=180,
+        upper_bound=1000,
+        lower_bound_operator=operator.gt,
+        round_to_n_digits=round_to_n_digits,
+    )
+
+
+def percent_values_gt_250(
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
+) -> np.float64:
+    """
+    Calculate the percent of values greater than (gt) 250 mg/dL.
 
     Parameters
     ----------
@@ -229,12 +229,69 @@ def percent_time_above_250(
     Returns
     -------
     int
-        The percent values above 250.
+        The percent values greater than (gt) 250.
     """
     return percent_values_by_range(
         bg_array,
-        lower_threshold=250,
-        upper_threshold=1000,
+        lower_bound=250,
+        upper_bound=1000,
+        lower_bound_operator=operator.gt,
+        round_to_n_digits=round_to_n_digits,
+    )
+
+
+
+
+def percent_values_gt_300(
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
+) -> np.float64:
+    """
+    Calculate the percent of values greater than (gt) 300 mg/dL.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with  float or int type.
+    round_to_n_digits : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent values greater than (gt) 300.
+    """
+    return percent_values_by_range(
+        bg_array,
+        lower_bound=300,
+        upper_bound=1000,
+        lower_bound_operator=operator.gt,
+        round_to_n_digits=round_to_n_digits,
+    )
+
+
+def percent_values_gt_400(
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
+) -> np.float64:
+    """
+    Calculate the percent of values greater than (gt) 400 mg/dL.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with  float or int type.
+    round_to_n_digits : int, optional
+        The number of digits to round the result to.
+
+    Returns
+    -------
+    int
+        The percent values greater than (gt) 400.
+    """
+    return percent_values_by_range(
+        bg_array,
+        lower_bound=400,
+        upper_bound=1000,
+        lower_bound_operator=operator.gt,
         round_to_n_digits=round_to_n_digits,
     )
 
