@@ -5,7 +5,7 @@ import operator
 import tidepool_data_science_metrics.common.common as common
 
 
-def gmi(bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 3) -> np.float64:
+def gmi(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
     A1C level that would be expected based on mean glucose measured
@@ -14,13 +14,13 @@ def gmi(bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 3) -> np.floa
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with float or int type.
     round_to_n_digits : int, optional
         The number of digits to round the result to.
 
     Returns
     -------
-    int
+    float
         The calculated Glucose Management Indicator
     """
     _validate_bg(bg_array)
@@ -102,16 +102,16 @@ def percent_values_ge_70_le_180(
     )
 
 
-def percent_time_above_180(
-    bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 3
+def percent_values_gt_180(
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a blood glucose above 180.
+    Calculate the percent of values with a glucose greater than (gt) 180.
 
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with  float or int type.
     round_to_n_digits : int, optional
         The number of digits to round the result to.
 
@@ -122,22 +122,23 @@ def percent_time_above_180(
     """
     return percent_values_by_range(
         bg_array,
-        lower_threshold=180,
-        upper_threshold=1000,
+        lower_bound=180,
+        upper_bound=1000,
+        lower_bound_operator=operator.gt,
         round_to_n_digits=round_to_n_digits,
     )
 
 
 def percent_time_below_70(
-    bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 3
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a blood glucose below 70.
+    Calculate the percent of values with a glucose below 70.
 
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with  float or int type.
     round_to_n_digits : int, optional
         The number of digits to round the result to.
 
@@ -148,22 +149,22 @@ def percent_time_below_70(
     """
     return percent_values_by_range(
         bg_array,
-        lower_threshold=1,
-        upper_threshold=70,
+        lower_bound=1,
+        upper_bound=70,
         round_to_n_digits=round_to_n_digits,
     )
 
 
 def percent_time_below_54(
-    bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 3
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a blood glucose below 54.
+    Calculate the percent of values with a glucose below 54.
 
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with  float or int type.
     round_to_n_digits : int, optional
         The number of digits to round the result to.
 
@@ -182,15 +183,15 @@ def percent_time_below_54(
 
 
 def percent_time_above_250(
-    bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 3
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
 ) -> np.float64:
     """
-    Calculate the percent of values with a blood glucose above 250.
+    Calculate the percent of values with a glucose above 250.
 
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with  float or int type.
     round_to_n_digits : int, optional
         The number of digits to round the result to.
 
@@ -208,7 +209,7 @@ def percent_time_above_250(
 
 
 def episodes(
-    bg_array: "np.ndarray[np.int64]",
+    bg_array: "np.ndarray[np.float64]",
     episodes_threshold: int,
     min_ct_per_ep: int = 3,
     min_duration: int = 5,
@@ -225,7 +226,7 @@ def episodes(
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with  float or int type.
     episodes_threshold : int
         Any bg values below this value will be considered as within the episode.
     min_ct_per_ep : int, optional
@@ -251,7 +252,7 @@ def episodes(
 
 
 def blood_glucose_risk_index(
-    bg_array: "np.ndarray[np.int64]", round_to_n_digits: int = 2
+    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 2
 ) -> Tuple[float, float, float]:
     """
     Calculate the LBGI, HBGI and BRGI within a set of glucose values from Clarke, W., & Kovatchev, B. (2009)
@@ -259,7 +260,7 @@ def blood_glucose_risk_index(
     Parameters
     ----------
     bg_array : ndarray
-        1D array containing data with `int` type.
+        1D array containing data with  float or int type.
     round_to_n_digits : int, optional
         The number of digits to round the result to.
 
