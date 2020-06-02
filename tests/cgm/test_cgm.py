@@ -260,10 +260,10 @@ def test_invalid_lower_greater_than_1000(bg_array_greater_than_1000):
     )
 
 
-# def test_percent_time_across_multiple_functions(bg_array):
-#     total = (
-#         percent_values_lt_70(bg_array, round_to_n_digits=0)
-#         + percent_values_by_range(bg_array, 69.99, 180.99, round_to_n_digits=0)
-#         + percent_values_gt_180(bg_array, round_to_n_digits=0)
-#     )
-#     assert total == 100
+def test_integration_of_percentages(bg_array):
+    total = (
+        percent_values_lt_70(bg_array, round_to_n_digits=9)
+        + percent_values_ge_70_le_180(bg_array, round_to_n_digits=9)
+        + percent_values_gt_180(bg_array, round_to_n_digits=9)
+    )
+    assert total == 100
