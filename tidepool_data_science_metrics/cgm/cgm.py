@@ -7,6 +7,7 @@ import tidepool_data_science_metrics.common.common as common
 # TODO: allow these functions to take in a mmol/L in addition to mg/dL
 # TODO: allow these functions to operate on a matrix of glucose column arrays
 
+
 def gmi(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
@@ -75,9 +76,7 @@ def percent_values_by_range(
     return rounded_percent
 
 
-def percent_values_ge_70_le_180(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_ge_70_le_180(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values with a glucose values that are
     greater-than-or-equal-to (ge) 70 and less-than-or-equal-to (le) 180 mg/dL.
@@ -104,9 +103,7 @@ def percent_values_ge_70_le_180(
     )
 
 
-def percent_values_lt_70(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_lt_70(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values less than (lt) 70 mg/dL.
 
@@ -123,17 +120,11 @@ def percent_values_lt_70(
         The percent values below 70.
     """
     return percent_values_by_range(
-        bg_array,
-        lower_bound=1,
-        upper_bound=70,
-        upper_bound_operator=operator.lt,
-        round_to_n_digits=round_to_n_digits,
+        bg_array, lower_bound=1, upper_bound=70, upper_bound_operator=operator.lt, round_to_n_digits=round_to_n_digits,
     )
 
 
-def percent_values_lt_54(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_lt_54(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values less than (lt) 54 mg/dL.
 
@@ -151,16 +142,11 @@ def percent_values_lt_54(
     """
     _validate_bg(bg_array)
     return percent_values_by_range(
-        bg_array,
-        lower_bound=1,
-        upper_bound=54,
-        upper_bound_operator=operator.lt,
-        round_to_n_digits=round_to_n_digits,
+        bg_array, lower_bound=1, upper_bound=54, upper_bound_operator=operator.lt, round_to_n_digits=round_to_n_digits,
     )
 
-def percent_values_lt_40(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+
+def percent_values_lt_40(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values less than (lt) 40 mg/dL.
 
@@ -178,17 +164,11 @@ def percent_values_lt_40(
     """
     _validate_bg(bg_array)
     return percent_values_by_range(
-        bg_array,
-        lower_bound=1,
-        upper_bound=40,
-        upper_bound_operator=operator.lt,
-        round_to_n_digits=round_to_n_digits,
+        bg_array, lower_bound=1, upper_bound=40, upper_bound_operator=operator.lt, round_to_n_digits=round_to_n_digits,
     )
 
 
-def percent_values_gt_180(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_gt_180(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values greater than (gt) 180 mg/dL.
 
@@ -213,9 +193,7 @@ def percent_values_gt_180(
     )
 
 
-def percent_values_gt_250(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_gt_250(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values greater than (gt) 250 mg/dL.
 
@@ -240,11 +218,7 @@ def percent_values_gt_250(
     )
 
 
-
-
-def percent_values_gt_300(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_gt_300(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values greater than (gt) 300 mg/dL.
 
@@ -269,9 +243,7 @@ def percent_values_gt_300(
     )
 
 
-def percent_values_gt_400(
-    bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3
-) -> np.float64:
+def percent_values_gt_400(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the percent of values greater than (gt) 400 mg/dL.
 
@@ -297,10 +269,7 @@ def percent_values_gt_400(
 
 
 def episodes(
-    bg_array: "np.ndarray[np.float64]",
-    episodes_threshold: int,
-    min_ct_per_ep: int = 3,
-    min_duration: int = 5,
+    bg_array: "np.ndarray[np.float64]", episodes_threshold: int, min_ct_per_ep: int = 3, min_duration: int = 5,
 ) -> np.float64:
     """
     Calculate the number of episodes for a given set of glucose values based on provided thresholds.
@@ -389,21 +358,13 @@ def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, in
 
 def _validate_bg(bg_array: "np.ndarray[np.float64]"):
     if (bg_array < 38).any():
-        warnings.warn(
-            "Some values in the passed in array had glucose values less than 38."
-        )
+        warnings.warn("Some values in the passed in array had glucose values less than 38.")
 
     if (bg_array > 402).any():
-        warnings.warn(
-            "Some values in the passed in array had glucose values greater than 402."
-        )
+        warnings.warn("Some values in the passed in array had glucose values greater than 402.")
 
     if (bg_array < 1).any():
-        raise Exception(
-            "Some values in the passed in array had glucose values less than 1."
-        )
+        raise Exception("Some values in the passed in array had glucose values less than 1.")
 
     if (bg_array > 1000).any():
-        raise Exception(
-            "Some values in the passed in array had glucose values greater than 1000."
-        )
+        raise Exception("Some values in the passed in array had glucose values greater than 1000.")

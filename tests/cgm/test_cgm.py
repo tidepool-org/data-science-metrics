@@ -26,17 +26,13 @@ def test_percent_values_by_range():
 def test_invalid_lower_number(bg_array):
     with pytest.raises(Exception) as excinfo:
         percent_values_by_range(bg_array, -1, 0)
-    assert "lower and upper thresholds must be a non-negative number" in str(
-        excinfo.value
-    )
+    assert "lower and upper thresholds must be a non-negative number" in str(excinfo.value)
 
 
 def test_invalid_upper_number(bg_array):
     with pytest.raises(Exception) as excinfo:
         percent_values_by_range(bg_array, 0, -1)
-    assert "lower and upper thresholds must be a non-negative number" in str(
-        excinfo.value
-    )
+    assert "lower and upper thresholds must be a non-negative number" in str(excinfo.value)
 
 
 def test_missing_lower_number(bg_array):
@@ -52,9 +48,7 @@ def test_missing_lower_number(bg_array):
 def test_lower_number_higher_than_upper_number(bg_array):
     with pytest.raises(Exception) as excinfo:
         percent_values_by_range(bg_array, 100, 20)
-    assert "lower threshold is higher than the " "upper threshold." in str(
-        excinfo.value
-    )
+    assert "lower threshold is higher than the " "upper threshold." in str(excinfo.value)
 
 
 def test_gmi(bg_array):
@@ -69,16 +63,10 @@ def test_gmi_warning_low_and_high(bg_array_low_high):
     # check that only one warning was raised
     assert len(record) == 2
     # check that the message matches
-    assert (
-        record[0].message.args[0]
-        == "Some values in the passed in array had glucose values less than 38."
-    )
+    assert record[0].message.args[0] == "Some values in the passed in array had glucose values less than 38."
 
     # check that the message matches
-    assert (
-        record[1].message.args[0]
-        == "Some values in the passed in array had glucose values greater than 402."
-    )
+    assert record[1].message.args[0] == "Some values in the passed in array had glucose values greater than 402."
 
 
 def test_gmi_warning_low(bg_array_low):
@@ -87,10 +75,7 @@ def test_gmi_warning_low(bg_array_low):
 
     assert len(record) == 1
 
-    assert (
-        record[0].message.args[0]
-        == "Some values in the passed in array had glucose values less than 38."
-    )
+    assert record[0].message.args[0] == "Some values in the passed in array had glucose values less than 38."
 
 
 def test_gmi_warning_high(bg_array_high):
@@ -99,10 +84,7 @@ def test_gmi_warning_high(bg_array_high):
 
     assert len(record) == 1
 
-    assert (
-        record[0].message.args[0]
-        == "Some values in the passed in array had glucose values greater than 402."
-    )
+    assert record[0].message.args[0] == "Some values in the passed in array had glucose values greater than 402."
 
 
 def test_gmi_round(bg_array):
@@ -180,10 +162,12 @@ def test_percent_time_above_180_round(bg_array):
     percent = percent_values_gt_180(bg_array, round_to_n_digits=0)
     assert 2 == percent
 
+
 def test_percent_values_lt_70_around_70():
     bg_array = np.array([40, 69.99999, 70, 70.00000001])
     percent = percent_values_lt_70(bg_array)
     assert percent == 50
+
 
 def test_percent_time_below_70(bg_array):
     percent = percent_values_lt_70(bg_array)
@@ -194,10 +178,12 @@ def test_percent_time_below_70_round(bg_array):
     percent = percent_values_lt_70(bg_array, round_to_n_digits=0)
     assert percent == 2.0
 
+
 def test_percent_values_lt_54_around_54():
     bg_array = np.array([40, 53.99999, 54, 54.00000001])
     percent = percent_values_lt_54(bg_array)
     assert percent == 50
+
 
 def test_percent_time_below_54(bg_array):
     percent = percent_values_lt_54(bg_array)
@@ -219,6 +205,7 @@ def test_percent_time_above_250_around_250():
     bg_array = np.array([249.999999, 250, 250.000001, 400])
     percent = percent_values_gt_250(bg_array)
     assert percent == 50
+
 
 def test_percent_time_above_250(bg_array):
     percent = percent_values_gt_250(bg_array)
@@ -245,19 +232,13 @@ def test_percent_time_above_400_around_400():
 def test_invalid_lower_less_than_1(bg_array_less_than_one):
     with pytest.raises(Exception) as excinfo:
         percent_values_by_range(bg_array_less_than_one, 0, 1001)
-    assert (
-        "Some values in the passed in array had glucose values less than 1."
-        in str(excinfo.value)
-    )
+    assert "Some values in the passed in array had glucose values less than 1." in str(excinfo.value)
 
 
 def test_invalid_lower_greater_than_1000(bg_array_greater_than_1000):
     with pytest.raises(Exception) as excinfo:
         percent_values_by_range(bg_array_greater_than_1000, 0, 1001)
-    assert (
-        "Some values in the passed in array had glucose values greater than 1000."
-        in str(excinfo.value)
-    )
+    assert "Some values in the passed in array had glucose values greater than 1000." in str(excinfo.value)
 
 
 def test_integration_of_percentages(bg_array):
