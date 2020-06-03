@@ -8,7 +8,7 @@ import tidepool_data_science_metrics.common.common as common
 # TODO: allow these functions to operate on a matrix of glucose column arrays
 
 
-def gmi(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
+def glucose_management_index(bg_array: "np.ndarray[np.float64]", round_to_n_digits: int = 3) -> np.float64:
     """
     Calculate the Glucose Management Indicator on set of glucose values. GMI indicates the average
     A1C level that would be expected based on mean glucose measured

@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
-from tidepool_data_science_metrics.cgm.cgm import (
+from tidepool_data_science_metrics.glucose.glucose import (
     percent_values_by_range,
-    gmi,
+    glucose_management_index,
     blood_glucose_risk_index,
     episodes,
     percent_values_ge_70_le_180,
@@ -52,13 +52,13 @@ def test_lower_number_higher_than_upper_number(bg_array):
 
 
 def test_gmi(bg_array):
-    gmi_value = gmi(bg_array)
+    gmi_value = glucose_management_index(bg_array)
     assert gmi_value == 5.43
 
 
 def test_gmi_warning_low_and_high(bg_array_low_high):
     with pytest.warns(UserWarning) as record:
-        gmi_value = gmi(bg_array_low_high)
+        gmi_value = glucose_management_index(bg_array_low_high)
 
     # check that only one warning was raised
     assert len(record) == 2
@@ -88,7 +88,7 @@ def test_gmi_warning_high(bg_array_high):
 
 
 def test_gmi_round(bg_array):
-    gmi_value = gmi(bg_array, 4)
+    gmi_value = glucose_management_index(bg_array, 4)
     assert gmi_value == 5.4303
 
 
