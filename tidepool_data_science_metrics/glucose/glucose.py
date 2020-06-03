@@ -333,19 +333,47 @@ def blood_glucose_risk_index(
     _validate_bg(bg_array)
     bg_array[bg_array < 1] = 1  # this is added to take care of edge case BG <= 0
     transformed_bg = 1.509 * ((np.log(bg_array) ** 1.084) - 5.381)
-    risk_power = 10 * (transformed_bg) ** 2
+    risk_power = 10 * (transformed_bg ** 2)
     low_risk_bool = transformed_bg < 0
     high_risk_bool = transformed_bg > 0
     rlBG = risk_power * low_risk_bool
     rhBG = risk_power * high_risk_bool
-    LBGI = np.mean(rlBG)
-    HBGI = np.mean(rhBG)
-    BGRI = round(LBGI + HBGI, round_to_n_digits)
+    lbgi = np.mean(rlBG)
+    hbgi = np.mean(rhBG)
+    bgri = round(lbgi + hbgi, round_to_n_digits)
     return (
-        round(np.mean(LBGI), round_to_n_digits),
-        round(np.mean(HBGI), round_to_n_digits),
-        BGRI,
+        round(lbgi, round_to_n_digits),
+        round(hbgi, round_to_n_digits),
+        bgri,
     )
+
+
+def lbgi_risk_score(lbgi: np.float64) -> int:
+    """
+    Calculate the Tidepool Risk Score associated with the LBGI
+    https://docs.google.com/document/d/1EfIqZPsk_aF6ccm2uxO8Kv6677FIZ7SgjAAX6CmRWOM/
+
+    Parameters
+    ----------
+    lbgi : float
+        LBGI value calculated from BGRI
+
+    Returns
+    -------
+    int
+        The Tidepool LBGI Risk Score.
+    """
+    if lbgi > 10:
+        risk_score = 4
+    elif lbgi > 5:
+        risk_score = 3
+    elif lbgi > 2.5:
+        risk_score = 2
+    elif lbgi > 0:
+        risk_score = 1
+    else:
+        risk_score = 0
+    return risk_score
 
 
 def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, int]:
