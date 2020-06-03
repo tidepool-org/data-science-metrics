@@ -12,13 +12,13 @@ if sys.version_info < (3, 6):
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-version_string = "v0.0.5"
+version_string = "v0.1.0"
 
 setuptools.setup(
     name="Tidepool Data Science Metrics",
     version=version_string,
-    author="Russ Wilson",
-    author_email="russ@tidepool.org",
+    author="Russ Wilson and Ed Nykaza",
+    author_email="ed@tidepool.org",
     description="Set of functions to produce common metrics used in Data Science at Tidepool.",
     long_description=long_description,
     long_description_content_type="text/markdown",
