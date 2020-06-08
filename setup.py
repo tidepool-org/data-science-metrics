@@ -12,7 +12,7 @@ if sys.version_info < (3, 6):
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-version_string = "v0.1.0"
+version_string = "v0.1.1"
 
 setuptools.setup(
     name="Tidepool Data Science Metrics",
@@ -23,7 +23,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/tidepool-org/data-science-metrics",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
     download_url=(
         "https://github.com/tidepool-org/data-science-metrics/tarball/" + version_string
     ),
