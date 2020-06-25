@@ -1,0 +1,3 @@
+graft tidepool_data_science_metrics
+exclude .travis.yml
+exclude tidepool_data_science_metrics/tests
