@@ -1,3 +1,9 @@
+"""
+Module glucose
+================
+This Module contains functions focused glucose related metrics.
+"""
+
 import numpy as np
 from typing import Tuple
 import warnings

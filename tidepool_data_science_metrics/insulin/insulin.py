@@ -1,3 +1,8 @@
+"""
+Module insulin
+================
+This Module contains functions focused insulin related metrics.
+"""
 import numpy as np
 
 
