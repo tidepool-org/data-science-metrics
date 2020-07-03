@@ -1,3 +1,9 @@
+"""
+Module common
+================
+This Module contains core common functions.
+"""
+
 import numpy as np
 from typing import List
 
