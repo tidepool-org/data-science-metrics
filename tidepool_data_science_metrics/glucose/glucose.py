@@ -376,6 +376,30 @@ def lbgi_risk_score(lbgi: np.float64) -> int:
     return risk_score
 
 
+def quadratic_log_loss(
+        bg_array: "np.ndarray[np.float64]", gc: float = 142
+    ):
+    """
+    Log loss computed as the mean squared error between the log of each bg and the log
+    of the set point, gc. gc default of 142 corresponds to a loss parameter used
+    for Tidepool Loop guardrail analysis Aug 2020 which loss = 5 * percent_below_54 + percent_above_250.
+
+    Parameters
+    ----------
+    bg_array : ndarray
+        1D array containing data with  float or int type.
+
+    gc : float, optional
+        The set point, which is the minimum of the quadratic
+
+    Returns
+    -------
+    float: loss
+    """
+    loss = np.mean(np.power(np.log(bg_array) - np.log(gc), 2))
+    return loss
+
+
 def _validate_input(lower_threshold: int, upper_threshold: int) -> Tuple[int, int]:
     if any(num < 0 for num in [lower_threshold, upper_threshold]):
         raise Exception("lower and upper thresholds must be a non-negative number")
