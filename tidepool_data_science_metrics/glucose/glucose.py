@@ -396,6 +396,7 @@ def quadratic_log_loss(
     -------
     float: loss
     """
+    _validate_bg(bg_array)
     loss = np.mean(np.power(np.log(bg_array) - np.log(gc), 2))
     return loss
 
